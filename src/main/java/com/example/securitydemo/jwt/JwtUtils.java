@@ -22,7 +22,7 @@ public class JwtUtils {
 
 
     @Value(("${spring.app.jwtExpirationMs}"))
-    private int jwtExpirationMs;// 1 hour
+    private long jwtExpirationMs;// 1 hour
 
     @Value("${spring.app.jwtSecret}")
     private String jwtSecret; // secret key for signing the token
@@ -48,13 +48,12 @@ public class JwtUtils {
     }
 
     //    Get the username from the token
-    public String getUsernameFromToken(String token) {
+    public String getUsernameFromJwtToken(String token) {
         return Jwts.parser()
                 .verifyWith((SecretKey) Key())
                 .build().parseSignedClaims(token)
                 .getPayload().getSubject();
     }
-
     //    Generate the signing key
     private Key Key() {
         return Keys.hmacShaKeyFor(
